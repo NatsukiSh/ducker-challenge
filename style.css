@@ -110,7 +110,7 @@ See the 2 styles below for an alternative approach using animations.
 
 /* Alternative approach to animate the duck - for StackBlitz only */
 .duck {
-  animation: changeDuckImage 0.6s step-start;
+  animation: changeDuckImage 0.6s step-start infinite;
 }
 @keyframes changeDuckImage {
   0% {

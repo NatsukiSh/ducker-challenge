@@ -32,7 +32,7 @@ const gridMatrix = [
 const victoryRow = 0;
 const riverRows = [1, 2];
 const roadRows = [4, 5, 6];
-const duckPosition = { x: 4, y: 8 };
+const duckPosition = { x: 4, y: 8 }; //x:horizontal y:vertical
 let contentBeforeDuck = "";
 let time = 15;
 
@@ -54,10 +54,59 @@ function drawGrid() {
       //[1,2]
       if (riverRows.includes(gridRowIndex)) {
         cellDiv.classList.add("cell");
+        //[4,5,6]
+      } else if (roadRows.includes(gridRowIndex)) {
+        cellDiv.classList.add("road");
+      }
+
+      //''-->"falsy"
+      //false-->boolean
+      //"river","road","car","bus","wood-->"truthy"
+      if (cellContent) {
+        cellDiv.classList.add(cellContent);
       }
 
       grid.appendChild(cellDiv);
     });
   });
 }
-drawGrid();
+
+function placeDuck() {
+  contentBeforeDuck = gridMatrix[duckPosition.y][duckPosition.x];
+  gridMatrix[duckPosition.y][duckPosition.x] = "duck";
+  //gridMatrix[8][4]='duck'
+  //  ["", "", "", "", "duck", "", "", "", ""]
+}
+
+function moveDuck(event) {
+  const key = event.key;
+  console.log("key", key);
+  console.log("contentBeforeDuck:", contentBeforeDuck);
+  gridMatrix[duckPosition.y][duckPosition.x] = contentBeforeDuck;
+
+  switch (key) {
+    case "ArrowUp":
+      if (duckPosition.y > 0) duckPosition.y--;
+      break;
+    case "ArrowDown":
+      if (duckPosition.y < 8) duckPosition.y++;
+      break;
+    case "ArrowLeft":
+      if (duckPosition.x > 0) duckPosition.x--;
+      break;
+    case "ArrowRight":
+      if (duckPosition.x < 8) duckPosition.x++;
+      break;
+  }
+
+  render();
+}
+
+function render() {
+  placeDuck();
+  drawGrid();
+}
+
+const renderLoop = setInterval(render, 600);
+
+document.addEventListener("keyup", moveDuck);
